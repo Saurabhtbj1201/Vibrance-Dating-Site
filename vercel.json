@@ -8,14 +8,7 @@
       "destination": "/artifacts/api-server/dist/index.mjs"
     }
   ],
-  "env": [
-    "DATABASE_URL",
-    "SUPABASE_URL",
-    "SUPABASE_ANON_KEY",
-    "SUPABASE_SERVICE_ROLE_KEY",
-    "PORT",
-    "SESSION_SECRET"
-  ],
+  "env": {},
   "functions": {
     "api/**/*.mjs": {
       "memory": 1024,
