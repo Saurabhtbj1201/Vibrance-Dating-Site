@@ -10,7 +10,7 @@
   ],
   "env": {},
   "functions": {
-    "api/**/*.mjs": {
+    "artifacts/api-server/dist/**/*.mjs": {
       "memory": 1024,
       "maxDuration": 30
     }
