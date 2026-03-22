@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 
-const JWT_SECRET = process.env.JWT_SECRET || "spark-dating-app-secret-2024";
+const JWT_SECRET = process.env.JWT_SECRET || "spark-dating-app-secret-2026";
 
 export function generateToken(userId: string): string {
   return jwt.sign({ userId }, JWT_SECRET, { expiresIn: "30d" });

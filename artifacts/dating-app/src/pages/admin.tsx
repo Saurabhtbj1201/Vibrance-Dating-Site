@@ -10,7 +10,7 @@ import { Link, useLocation } from "wouter";
 import { cn } from "@/components/layout";
 
 const BASE_URL = import.meta.env.BASE_URL;
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || window.location.origin;
 
 type Tab = "verifications" | "colleges" | "profiles" | "admins";
 
