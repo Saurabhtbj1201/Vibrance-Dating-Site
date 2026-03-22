@@ -1,0 +1,715 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.1.0
+  description: Spark Dating App API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: auth
+    description: Authentication operations
+  - name: profiles
+    description: User profile operations
+  - name: discovery
+    description: Discovery and swipe operations
+  - name: matches
+    description: Match operations
+  - name: messages
+    description: Chat message operations
+  - name: notifications
+    description: Notification operations
+  - name: Storage
+    description: Object storage upload and serving endpoints.
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /auth/register:
+    post:
+      operationId: register
+      tags: [auth]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+      responses:
+        "201":
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "409":
+          description: Email already exists
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Login with email and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Successfully authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Invalid credentials
+
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: Logout current user
+      responses:
+        "200":
+          description: Logged out successfully
+
+  /auth/me:
+    get:
+      operationId: getCurrentUser
+      tags: [auth]
+      summary: Get current logged-in user
+      responses:
+        "200":
+          description: Current user info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserWithProfile"
+        "401":
+          description: Not authenticated
+
+  /profiles/me:
+    get:
+      operationId: getMyProfile
+      tags: [profiles]
+      summary: Get my profile
+      responses:
+        "200":
+          description: My profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Profile"
+        "401":
+          description: Not authenticated
+    put:
+      operationId: updateMyProfile
+      tags: [profiles]
+      summary: Update my profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProfileRequest"
+      responses:
+        "200":
+          description: Profile updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Profile"
+
+  /profiles/{profileId}:
+    get:
+      operationId: getProfile
+      tags: [profiles]
+      summary: Get a user profile by ID
+      parameters:
+        - name: profileId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Profile found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Profile"
+        "404":
+          description: Profile not found
+
+  /discovery:
+    get:
+      operationId: getDiscoveryProfiles
+      tags: [discovery]
+      summary: Get profiles for the discovery feed
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: List of profiles to swipe on
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Profile"
+
+  /swipes:
+    post:
+      operationId: recordSwipe
+      tags: [discovery]
+      summary: Record a swipe action (like or pass)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SwipeRequest"
+      responses:
+        "200":
+          description: Swipe recorded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SwipeResponse"
+
+  /matches:
+    get:
+      operationId: getMatches
+      tags: [matches]
+      summary: Get all matches for the current user
+      responses:
+        "200":
+          description: List of matches
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Match"
+
+  /matches/{matchId}:
+    get:
+      operationId: getMatch
+      tags: [matches]
+      summary: Get a specific match
+      parameters:
+        - name: matchId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Match details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Match"
+        "404":
+          description: Match not found
+
+  /matches/{matchId}/messages:
+    get:
+      operationId: getMessages
+      tags: [messages]
+      summary: Get messages in a match conversation
+      parameters:
+        - name: matchId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+        - name: before
+          in: query
+          schema:
+            type: string
+          description: Message ID to paginate before
+      responses:
+        "200":
+          description: Messages list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Message"
+    post:
+      operationId: sendMessage
+      tags: [messages]
+      summary: Send a message in a match conversation
+      parameters:
+        - name: matchId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendMessageRequest"
+      responses:
+        "201":
+          description: Message sent
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+        "403":
+          description: Not in this match
+
+  /notifications:
+    get:
+      operationId: getNotifications
+      tags: [notifications]
+      summary: Get notifications for current user
+      responses:
+        "200":
+          description: List of notifications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Notification"
+
+  /notifications/{notificationId}/read:
+    put:
+      operationId: markNotificationRead
+      tags: [notifications]
+      summary: Mark a notification as read
+      parameters:
+        - name: notificationId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Notification marked as read
+
+  /storage/uploads/request-url:
+    post:
+      tags: [Storage]
+      operationId: requestUploadUrl
+      summary: Request a presigned URL for file upload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadUrlRequest'
+      responses:
+        '200':
+          description: Presigned upload URL generated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadUrlResponse'
+        '400':
+          description: Missing or invalid required fields.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+  /storage/objects/{objectPath}:
+    get:
+      tags: [Storage]
+      operationId: getStorageObject
+      summary: Serve an uploaded object
+      parameters:
+        - name: objectPath
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Object content streamed.
+          content:
+            '*/*':
+              schema:
+                type: string
+                format: binary
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    RegisterRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 6
+        name:
+          type: string
+        age:
+          type: integer
+          minimum: 18
+          maximum: 100
+      required:
+        - email
+        - password
+        - name
+        - age
+
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+        - email
+        - password
+
+    AuthResponse:
+      type: object
+      properties:
+        user:
+          $ref: "#/components/schemas/UserWithProfile"
+        token:
+          type: string
+      required:
+        - user
+        - token
+
+    UserWithProfile:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        profile:
+          $ref: "#/components/schemas/Profile"
+      required:
+        - id
+        - email
+
+    Profile:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        name:
+          type: string
+        age:
+          type: integer
+        dateOfBirth:
+          type: string
+        gender:
+          type: string
+        location:
+          type: string
+        photos:
+          type: array
+          items:
+            type: string
+        bio:
+          type: string
+        interests:
+          type: array
+          items:
+            type: string
+        profession:
+          type: string
+        education:
+          type: string
+        languages:
+          type: array
+          items:
+            type: string
+        smoking:
+          type: string
+          enum: [yes, no, occasionally]
+        drinking:
+          type: string
+          enum: [yes, no, socially]
+        workout:
+          type: string
+          enum: [active, sometimes, never]
+        diet:
+          type: string
+          enum: [veg, non-veg, vegan]
+        pets:
+          type: string
+          enum: [yes, no]
+        lookingFor:
+          type: string
+          enum: [casual, serious, friendship]
+        interestedIn:
+          type: string
+          enum: [men, women, everyone]
+        minAgePreference:
+          type: integer
+        maxAgePreference:
+          type: integer
+        distancePreference:
+          type: integer
+        hobbies:
+          type: array
+          items:
+            type: string
+        favoriteMusic:
+          type: string
+        favoriteMovies:
+          type: string
+        instagramHandle:
+          type: string
+        zodiacSign:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        completionPercent:
+          type: integer
+      required:
+        - id
+        - userId
+        - name
+        - age
+        - photos
+        - interests
+
+    UpdateProfileRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        dateOfBirth:
+          type: string
+        gender:
+          type: string
+        location:
+          type: string
+        photos:
+          type: array
+          items:
+            type: string
+        bio:
+          type: string
+        interests:
+          type: array
+          items:
+            type: string
+        profession:
+          type: string
+        education:
+          type: string
+        languages:
+          type: array
+          items:
+            type: string
+        smoking:
+          type: string
+        drinking:
+          type: string
+        workout:
+          type: string
+        diet:
+          type: string
+        pets:
+          type: string
+        lookingFor:
+          type: string
+        interestedIn:
+          type: string
+        minAgePreference:
+          type: integer
+        maxAgePreference:
+          type: integer
+        distancePreference:
+          type: integer
+        hobbies:
+          type: array
+          items:
+            type: string
+        favoriteMusic:
+          type: string
+        favoriteMovies:
+          type: string
+        instagramHandle:
+          type: string
+        zodiacSign:
+          type: string
+
+    SwipeRequest:
+      type: object
+      properties:
+        targetUserId:
+          type: string
+        action:
+          type: string
+          enum: [like, pass]
+      required:
+        - targetUserId
+        - action
+
+    SwipeResponse:
+      type: object
+      properties:
+        matched:
+          type: boolean
+        matchId:
+          type: string
+      required:
+        - matched
+
+    Match:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        matchedUserId:
+          type: string
+        profile:
+          $ref: "#/components/schemas/Profile"
+        lastMessage:
+          $ref: "#/components/schemas/Message"
+        createdAt:
+          type: string
+          format: date-time
+        unreadCount:
+          type: integer
+      required:
+        - id
+        - userId
+        - matchedUserId
+        - createdAt
+
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+        matchId:
+          type: string
+        senderId:
+          type: string
+        content:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        read:
+          type: boolean
+      required:
+        - id
+        - matchId
+        - senderId
+        - content
+        - createdAt
+        - read
+
+    SendMessageRequest:
+      type: object
+      properties:
+        content:
+          type: string
+      required:
+        - content
+
+    Notification:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        type:
+          type: string
+          enum: [new_match, new_message, profile_like]
+        title:
+          type: string
+        body:
+          type: string
+        read:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        data:
+          type: object
+          additionalProperties: true
+      required:
+        - id
+        - userId
+        - type
+        - title
+        - body
+        - read
+        - createdAt
+    UploadUrlRequest:
+      type: object
+      required: [name, size, contentType]
+      properties:
+        name:
+          type: string
+        size:
+          type: integer
+        contentType:
+          type: string
+    UploadUrlResponse:
+      type: object
+      required: [uploadURL, objectPath]
+      properties:
+        uploadURL:
+          type: string
+        objectPath:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/UploadUrlRequest'
+    ErrorEnvelope:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string

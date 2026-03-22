@@ -1,0 +1,25 @@
+packages:
+  "framer-motion": "For fluid card swipe animations, drag gestures, and page transitions"
+  "date-fns": "For formatting chat timestamps and relative times (e.g., '2 hours ago')"
+  "lucide-react": "For modern, consistent iconography throughout the application"
+  "clsx": "For constructing dynamic CSS class names"
+  "tailwind-merge": "For merging Tailwind CSS classes without style conflicts"
+
+images:
+  - path: "artifacts/dating-app/public/images/logo.png"
+    description: "Sleek modern dating app logo icon, a glowing abstract continuous line forming a subtle heart and spark shape in neon pink and deep purple, transparent background"
+    aspect_ratio: "1:1"
+  - path: "artifacts/dating-app/public/images/hero-bg.png"
+    description: "Dark romantic abstract background, deep obsidian and midnight purple with soft warm pink light leaks, glowing bokeh effects, and sleek glassmorphism spheres"
+    aspect_ratio: "16:9"
+  - path: "artifacts/dating-app/public/images/empty-matches.png"
+    description: "Abstract 3D illustration of two floating translucent geometric hearts in deep purple and dark pink on a dark background, minimal and sleek"
+    aspect_ratio: "1:1"
+  - path: "artifacts/dating-app/public/images/placeholder-avatar.png"
+    description: "Abstract colorful gradient mesh portrait silhouette on dark background, sleek and modern"
+    aspect_ratio: "1:1"
+
+notes:
+  - Using generated React Query hooks from @workspace/api-client-react
+  - Token-based authentication stored in localStorage ('spark_token')
+  - Polling configured for real-time messaging and match updates
