@@ -16,7 +16,6 @@
     "PORT",
     "SESSION_SECRET"
   ],
-  "envPrefix": ["NEXT_PUBLIC_", "VITE_"],
   "functions": {
     "api/**/*.mjs": {
       "memory": 1024,
