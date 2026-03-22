@@ -1,5 +1,6 @@
 {
-  "buildCommand": "pnpm install && pnpm run -r build",
+  "installCommand": "pnpm install --no-frozen-lockfile",
+  "buildCommand": "pnpm run -r build",
   "outputDirectory": "artifacts/dating-app/dist/public",
   "framework": "vite",
   "rewrites": [
