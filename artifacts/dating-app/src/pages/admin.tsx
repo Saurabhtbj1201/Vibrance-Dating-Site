@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { cn } from "@/components/layout";
+import { resolveImageUrl } from "@/lib/image-url";
 
 const BASE_URL = import.meta.env.BASE_URL;
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
@@ -22,6 +23,7 @@ interface AdminUser { id: string; email: string; name?: string | null; photo?: s
 // ── Image lightbox ───────────────────────────────────────────────────────────
 
 function ImageModal({ url, label, onClose }: { url: string; label: string; onClose: () => void }) {
+  const resolvedUrl = resolveImageUrl(url);
   return (
     <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black/90 backdrop-blur-sm" onClick={onClose}>
       <div className="relative w-full max-w-sm px-4" onClick={e => e.stopPropagation()}>
@@ -31,7 +33,7 @@ function ImageModal({ url, label, onClose }: { url: string; label: string; onClo
             <X className="w-4 h-4 text-white" />
           </button>
         </div>
-        <img src={url} alt={label} className="w-full rounded-2xl object-contain max-h-[70vh]" />
+        <img src={resolvedUrl} alt={label} className="w-full rounded-2xl object-contain max-h-[70vh]" />
       </div>
     </div>
   );
@@ -55,7 +57,7 @@ function DocImageSet({ docs }: { docs: { url: string; label: string }[] }) {
               </div>
             ) : (
               <>
-                <img src={doc.url} alt={doc.label}
+                <img src={resolveImageUrl(doc.url)} alt={doc.label}
                   className="w-full h-full object-cover"
                   onError={() => setErrors(e => ({ ...e, [doc.label]: true }))} />
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -248,7 +250,7 @@ function ProfilesTab({ token, selfUserId }: { token: string; selfUserId: string 
             {p.photos.map((url: string, i: number) => (
               <button key={i} onClick={() => setLightboxPhoto({ url, label: i === 0 ? "Main Photo" : `Photo ${i + 1}` })}
                 className={`relative rounded-xl overflow-hidden bg-muted group ${i === 0 ? "col-span-2 row-span-2" : ""} aspect-square`}>
-                <img src={url} alt="" className="w-full h-full object-cover" />
+                <img src={resolveImageUrl(url)} alt="" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <Eye className="w-5 h-5 text-white" />
                 </div>
@@ -368,7 +370,7 @@ function ProfilesTab({ token, selfUserId }: { token: string; selfUserId: string 
             className="w-full flex items-center gap-3 bg-card border border-border rounded-xl px-4 py-3 hover:border-primary/30 transition-colors text-left">
             <div className="w-10 h-10 rounded-full overflow-hidden bg-muted shrink-0">
               {row.profile.photos?.[0]
-                ? <img src={row.profile.photos[0]} alt="" className="w-full h-full object-cover" />
+                ? <img src={resolveImageUrl(row.profile.photos[0])} alt="" className="w-full h-full object-cover" />
                 : <User className="w-5 h-5 text-muted-foreground m-2.5" />}
             </div>
             <div className="flex-1 min-w-0">
@@ -466,7 +468,7 @@ function VerificationsTab({ token }: { token: string }) {
               onClick={() => setExpanded(expanded === row.request.id ? null : row.request.id)}>
               <div className="w-10 h-10 rounded-full overflow-hidden bg-muted shrink-0">
                 {row.profile?.photos?.[0]
-                  ? <img src={row.profile.photos[0]} alt="" className="w-full h-full object-cover" />
+                  ? <img src={resolveImageUrl(row.profile.photos[0])} alt="" className="w-full h-full object-cover" />
                   : <User className="w-5 h-5 text-muted-foreground m-2.5" />}
               </div>
               <div className="flex-1 min-w-0">

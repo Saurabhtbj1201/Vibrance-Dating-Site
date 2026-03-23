@@ -29,7 +29,7 @@ export function Layout({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="min-h-[100dvh] flex flex-col max-w-md mx-auto relative bg-background shadow-2xl shadow-black/50 overflow-hidden">
+    <div className="min-h-[100dvh] flex flex-col mx-auto relative bg-background shadow-2xl shadow-black/50 overflow-hidden">
 
       {/* Header */}
       {showNav && (

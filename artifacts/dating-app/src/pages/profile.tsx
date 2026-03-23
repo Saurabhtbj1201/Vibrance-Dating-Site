@@ -101,12 +101,13 @@ function PhotoGrid({ photos, onChange, token }: { photos: string[]; onChange: (p
       <div className="grid grid-cols-3 gap-2">
         {slots.map((_, i) => {
           const url = photos[i];
+          const imageUrl = resolveImageUrl(url);
           const isMain = i === 0;
           return (
             <div key={i} className={`relative rounded-xl overflow-hidden border-2 ${isMain ? "border-primary" : "border-dashed border-border"} bg-muted aspect-square`}>
               {url ? (
                 <>
-                  <img src={url} alt="" className="w-full h-full object-cover" />
+                  <img src={imageUrl} alt="" className="w-full h-full object-cover" />
                   <button
                     onClick={() => onChange(photos.filter((_, j) => j !== i))}
                     className="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/60 flex items-center justify-center text-white"
