@@ -8,7 +8,7 @@ import { Link } from "wouter";
 import { cn } from "@/components/layout";
 
 const BASE_URL = import.meta.env.BASE_URL;
-const BACKEND_URL = "http://localhost:3000";
+const BACKEND_URL = (import.meta.env.VITE_BACKEND_URL || "http://localhost:3000").replace(/\/$/, "");
 
 const ID_TYPES = [
   { value: "aadhar", label: "Aadhaar Card" },

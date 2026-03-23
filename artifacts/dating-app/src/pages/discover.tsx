@@ -7,7 +7,7 @@ import { useGetDiscoveryProfiles, useRecordSwipe, type Profile } from "@workspac
 import { useAuth } from "@/hooks/use-auth";
 
 const BASE_URL = import.meta.env.BASE_URL;
-const BACKEND_URL = "http://localhost:3000";
+const BACKEND_URL = (import.meta.env.VITE_BACKEND_URL || "http://localhost:3000").replace(/\/$/, "");
 
 interface College { id: string; name: string; city?: string; state?: string; }
 

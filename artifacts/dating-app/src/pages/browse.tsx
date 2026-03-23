@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 
 const BASE_URL = import.meta.env.BASE_URL.replace(/\/$/, "");
+const BACKEND_URL = (import.meta.env.VITE_BACKEND_URL || "http://localhost:3000").replace(/\/$/, "");
 const PAGE_SIZE = 20;
 
 interface BrowseProfile {

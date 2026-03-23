@@ -23,7 +23,7 @@ function calcAge(dob: string): number {
   return age;
 }
 
-const BACKEND_URL = "http://localhost:3000";
+const BACKEND_URL = (import.meta.env.VITE_BACKEND_URL || "http://localhost:3000").replace(/\/$/, "");
 const BASE_URL = import.meta.env.BASE_URL;
 
 const INTERESTS_PRESET = [
