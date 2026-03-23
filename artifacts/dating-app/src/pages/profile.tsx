@@ -493,7 +493,7 @@ export default function Profile() {
                 <div className="grid grid-cols-3 gap-2">
                   {profile.photos.slice(0, 5).map((url, i) => (
                     <div key={i} className={`relative rounded-xl overflow-hidden aspect-square ${i === 0 ? "col-span-2 row-span-2" : ""}`}>
-                      <img src={url} alt="" className="w-full h-full object-cover" />
+                      <img src={resolveImageUrl(url)} alt="" className="w-full h-full object-cover" />
                       {i === 0 && <span className="absolute bottom-1 left-1 text-xs bg-primary text-white px-1.5 py-0.5 rounded-full font-medium">Main</span>}
                     </div>
                   ))}

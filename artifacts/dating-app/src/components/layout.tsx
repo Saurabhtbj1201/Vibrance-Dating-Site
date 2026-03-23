@@ -12,6 +12,7 @@ export function cn(...inputs: ClassValue[]) {
 export function Layout({ children }: { children: ReactNode }) {
   const [location] = useLocation();
   const { isAuthenticated, isLoading } = useAuth();
+  const isPublicPage = location === "/" || location === "/auth";
 
   const showNav =
     isAuthenticated &&
@@ -29,7 +30,10 @@ export function Layout({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="min-h-[100dvh] flex flex-col mx-auto relative bg-background shadow-2xl shadow-black/50 overflow-hidden">
+    <div className={cn(
+      "min-h-[100dvh] flex flex-col mx-auto relative bg-background shadow-2xl shadow-black/50 overflow-hidden",
+      isPublicPage ? "" : "max-w-md",
+    )}>
 
       {/* Header */}
       {showNav && (

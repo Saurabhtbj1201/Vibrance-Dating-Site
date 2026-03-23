@@ -31,15 +31,15 @@ export default function Landing() {
       <header className="w-full px-6 lg:px-10 xl:px-16 py-6 flex items-center justify-between relative z-20">
         <div className="flex items-center gap-2">
           <img src={`${import.meta.env.BASE_URL}images/logo.png`} alt="Vibrance" className="w-10 h-10 rounded-xl object-cover shadow-lg shadow-primary/30" />
-          <span className="text-2xl font-display font-bold text-foreground">Vibrance</span>
+          <span className="text-2xl font-display font-bold text-primary">Vibrance</span>
         </div>
         
         <nav className="hidden md:flex items-center gap-8">
           <a href="#" className="text-sm font-medium text-foreground hover:text-primary transition-colors">Home</a>
-          <a href="#" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Discover</a>
-          <a href="#" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">App</a>
-          <a href="#" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">About</a>
-          <a href="#" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Contact</a>
+          <a href="#" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">Discover</a>
+          <a href="#" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">App</a>
+          <a href="#" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">About</a>
+          <a href="#" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">Contact</a>
         </nav>
         
         <div className="flex items-center">
