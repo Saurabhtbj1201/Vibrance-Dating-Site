@@ -6,6 +6,7 @@ import {
   Wine, Dumbbell, Salad, PawPrint, Target, Instagram, Music, Film, BadgeCheck
 } from "lucide-react";
 import type { Profile } from "@workspace/api-client-react";
+import { resolveImageUrl } from "@/lib/image-url";
 
 interface SwipeCardProps {
   profile: Profile;
@@ -198,7 +199,7 @@ export function SwipeCard({ profile, isFront, onSwipe }: SwipeCardProps) {
     }
   };
 
-  const imageUrl = profile.photos?.[0] || `${import.meta.env.BASE_URL}images/placeholder-avatar.png`;
+  const imageUrl = resolveImageUrl(profile.photos?.[0]);
 
   return (
     <motion.div

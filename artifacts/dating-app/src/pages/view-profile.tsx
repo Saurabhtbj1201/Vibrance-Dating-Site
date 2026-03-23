@@ -5,6 +5,7 @@ import {
   Star, Music, Film, Instagram, ChevronLeft
 } from "lucide-react";
 import { useGetProfile } from "@workspace/api-client-react";
+import { resolveImageUrl } from "@/lib/image-url";
 
 export default function ViewProfile() {
   const [, params] = useRoute("/profiles/:profileId");
@@ -18,7 +19,7 @@ export default function ViewProfile() {
   );
   if (!profile) return <div className="p-8 text-center text-foreground">Profile not found</div>;
 
-  const imageUrl = profile.photos?.[0] || `${import.meta.env.BASE_URL}images/placeholder-avatar.png`;
+  const imageUrl = resolveImageUrl(profile.photos?.[0]);
 
   const InfoRow = ({ icon: Icon, label, value }: { icon: any; label: string; value?: string | null }) => {
     if (!value) return null;

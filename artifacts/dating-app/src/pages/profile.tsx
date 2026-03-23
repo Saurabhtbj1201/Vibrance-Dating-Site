@@ -11,6 +11,7 @@ import { Link } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { useGetMyProfile, useUpdateMyProfile, type UpdateProfileRequest } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
+import { resolveImageUrl } from "@/lib/image-url";
 
 // ── helpers ─────────────────────────────────────────────────────────────────
 
@@ -387,7 +388,7 @@ export default function Profile() {
 
   if (isLoading) return <div className="flex items-center justify-center h-full"><div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>;
 
-  const avatarUrl = (form.photos as string[])?.[0] || profile?.photos?.[0] || `${BASE_URL}images/placeholder-avatar.png`;
+  const avatarUrl = resolveImageUrl((form.photos as string[])?.[0] || profile?.photos?.[0]);
   const completion = (profile as any)?.completionPercent ?? 0;
   const displayAge = form.dateOfBirth ? calcAge(form.dateOfBirth) : profile?.age;
 

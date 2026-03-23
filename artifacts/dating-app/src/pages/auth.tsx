@@ -58,7 +58,7 @@ export default function Auth() {
             {isLogin ? "Welcome back" : "Create account"}
           </h2>
           <p style={{ color: "#6B6B9A" }}>
-            {isLogin ? "Enter your details to find sparks." : "Join Spark to meet new people."}
+            {isLogin ? "Enter your details to find sparks." : "Join Vibrance to meet new people."}
           </p>
         </div>
 

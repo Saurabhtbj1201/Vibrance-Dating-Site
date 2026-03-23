@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X } from "lucide-react";
 import { useLocation } from "wouter";
 import type { Profile } from "@workspace/api-client-react";
+import { resolveImageUrl } from "@/lib/image-url";
 
 interface MatchModalProps {
   isOpen: boolean;
@@ -15,7 +16,7 @@ export function MatchModal({ isOpen, onClose, matchProfile, matchId }: MatchModa
 
   if (!matchProfile) return null;
 
-  const imageUrl = matchProfile.photos?.[0] || `${import.meta.env.BASE_URL}images/placeholder-avatar.png`;
+  const imageUrl = resolveImageUrl(matchProfile.photos?.[0]);
 
   return (
     <AnimatePresence>
@@ -45,7 +46,7 @@ export function MatchModal({ isOpen, onClose, matchProfile, matchId }: MatchModa
                 transition={{ type: "spring", damping: 15, delay: 0.3 }}
                 className="absolute top-0 left-0 w-32 h-32 rounded-full border-4 border-background shadow-2xl overflow-hidden bg-muted"
               >
-                <img src={`${import.meta.env.BASE_URL}images/placeholder-avatar.png`} className="w-full h-full object-cover" alt="You" />
+                <img src={resolveImageUrl()} className="w-full h-full object-cover" alt="You" />
               </motion.div>
 
               <motion.div

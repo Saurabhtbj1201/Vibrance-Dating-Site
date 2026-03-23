@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { formatDistanceToNow } from "date-fns";
 import { Loader2, Search, Sparkles } from "lucide-react";
 import { useGetMatches } from "@workspace/api-client-react";
+import { resolveImageUrl } from "@/lib/image-url";
 
 export default function Matches() {
   const [search, setSearch] = useState("");
@@ -61,9 +62,7 @@ export default function Matches() {
             {filtered.map((match) => {
               const profile = match.profile;
               if (!profile) return null;
-              const imageUrl =
-                profile.photos?.[0] ||
-                `${import.meta.env.BASE_URL}images/placeholder-avatar.png`;
+              const imageUrl = resolveImageUrl(profile.photos?.[0]);
 
               return (
                 <Link key={match.id} href={`/chat/${match.id}`}>

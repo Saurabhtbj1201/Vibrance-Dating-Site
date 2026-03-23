@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { Loader2, Heart, Sparkles } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { resolveImageUrl } from "@/lib/image-url";
 
 interface LikedProfile {
   id: string;
@@ -19,8 +20,8 @@ function useLikedProfiles() {
     queryKey: ["liked"],
     queryFn: async () => {
       const token = localStorage.getItem("spark_token");
-      const base = import.meta.env.BASE_URL.replace(/\/$/, "");
-      const res = await fetch(`${base}/api/liked`, {
+      const backend = (import.meta.env.VITE_BACKEND_URL || "http://localhost:3000").replace(/\/$/, "");
+      const res = await fetch(`${backend}/api/liked`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error("Failed to fetch liked profiles");
@@ -97,9 +98,7 @@ export default function Liked() {
 }
 
 function ProfileCard({ profile }: { profile: LikedProfile }) {
-  const imageUrl =
-    profile.photos?.[0] ||
-    `${import.meta.env.BASE_URL}images/placeholder-avatar.png`;
+  const imageUrl = resolveImageUrl(profile.photos?.[0]);
 
   const card = (
     <div className="relative rounded-2xl overflow-hidden aspect-[3/4] group cursor-pointer">

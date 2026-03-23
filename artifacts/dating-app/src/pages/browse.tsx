@@ -6,6 +6,7 @@ import {
   Dumbbell, Salad, PawPrint, Target, Music, Film, Instagram,
   SlidersHorizontal,
 } from "lucide-react";
+import { resolveImageUrl } from "@/lib/image-url";
 
 const BASE_URL = import.meta.env.BASE_URL.replace(/\/$/, "");
 const BACKEND_URL = (import.meta.env.VITE_BACKEND_URL || "http://localhost:3000").replace(/\/$/, "");
@@ -71,7 +72,7 @@ function Badge({ icon, text }: { icon: React.ReactNode; text: string }) {
 }
 
 function ProfileModal({ profile, onClose }: { profile: BrowseProfile; onClose: () => void }) {
-  const mainPhoto = profile.photos?.[0] || `${import.meta.env.BASE_URL}images/placeholder-avatar.png`;
+  const mainPhoto = resolveImageUrl(profile.photos?.[0]);
 
   return (
     <motion.div
@@ -249,7 +250,7 @@ function ProfileModal({ profile, onClose }: { profile: BrowseProfile; onClose: (
 // ── Profile Card ───────────────────────────────────────────────────────────────
 
 function ProfileCard({ profile, onClick }: { profile: BrowseProfile; onClick: () => void }) {
-  const photo = profile.photos?.[0] || `${import.meta.env.BASE_URL}images/placeholder-avatar.png`;
+  const photo = resolveImageUrl(profile.photos?.[0]);
   return (
     <motion.button
       onClick={onClick}

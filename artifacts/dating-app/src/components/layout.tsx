@@ -35,8 +35,8 @@ export function Layout({ children }: { children: ReactNode }) {
       {showNav && (
         <header className="px-5 pt-12 pb-3 border-b border-white/5 bg-background z-40 flex items-center justify-between sticky top-0">
           <div className="flex items-center gap-2">
-            <Flame className="w-7 h-7 text-primary" fill="currentColor" />
-            <span className="font-display font-bold text-2xl tracking-tight text-gradient">Spark</span>
+            <img src={`${import.meta.env.BASE_URL}images/logo.png`} alt="Vibrance" className="w-7 h-7 rounded-lg object-cover" />
+            <span className="font-display font-bold text-2xl tracking-tight text-gradient">Vibrance</span>
           </div>
         </header>
       )}

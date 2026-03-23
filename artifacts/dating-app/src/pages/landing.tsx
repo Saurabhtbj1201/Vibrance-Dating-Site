@@ -28,12 +28,10 @@ export default function Landing() {
       />
       
       {/* Navbar */}
-      <header className="w-full max-w-7xl mx-auto px-6 py-6 flex items-center justify-between relative z-20">
+      <header className="w-full px-6 lg:px-10 xl:px-16 py-6 flex items-center justify-between relative z-20">
         <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/30">
-            <Flame className="w-6 h-6 fill-current" />
-          </div>
-          <span className="text-2xl font-display font-bold text-foreground">Spark</span>
+          <img src={`${import.meta.env.BASE_URL}images/logo.png`} alt="Vibrance" className="w-10 h-10 rounded-xl object-cover shadow-lg shadow-primary/30" />
+          <span className="text-2xl font-display font-bold text-foreground">Vibrance</span>
         </div>
         
         <nav className="hidden md:flex items-center gap-8">
@@ -54,7 +52,7 @@ export default function Landing() {
       </header>
 
       {/* Main Hero Section */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10 pt-10 pb-20">
+      <main className="flex-1 w-full px-6 lg:px-10 xl:px-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10 pt-10 pb-20">
         
         {/* Left Content */}
         <div className="flex flex-col items-start text-left space-y-8">

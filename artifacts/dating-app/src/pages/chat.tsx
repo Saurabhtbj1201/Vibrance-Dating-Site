@@ -4,6 +4,7 @@ import { ArrowLeft, Send, MoreVertical } from "lucide-react";
 import { format } from "date-fns";
 import { useGetMatch, useGetMessages, useSendMessage, useGetCurrentUser } from "@workspace/api-client-react";
 import { clsx } from "clsx";
+import { resolveImageUrl } from "@/lib/image-url";
 
 export default function Chat() {
   const [, params] = useRoute("/chat/:matchId");
@@ -40,7 +41,7 @@ export default function Chat() {
   };
 
   const profile = match?.profile;
-  const avatarUrl = profile?.photos?.[0] || `${import.meta.env.BASE_URL}images/placeholder-avatar.png`;
+  const avatarUrl = resolveImageUrl(profile?.photos?.[0]);
 
   return (
     <div className="flex flex-col h-[100dvh] w-full bg-background absolute inset-0 z-50">
