@@ -168,7 +168,10 @@ router.put("/me", requireAuth, async (req, res) => {
 
 router.get("/:profileId", requireAuth, async (req, res) => {
   try {
-    const profiles = await db.select().from(profilesTable).where(eq(profilesTable.id, req.params.profileId)).limit(1);
+    const profileId = Array.isArray(req.params.profileId)
+      ? req.params.profileId[0]
+      : req.params.profileId;
+    const profiles = await db.select().from(profilesTable).where(eq(profilesTable.id, profileId)).limit(1);
     if (profiles.length === 0) {
       res.status(404).json({ error: "Profile not found" });
       return;

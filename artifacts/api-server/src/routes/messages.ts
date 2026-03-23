@@ -11,9 +11,12 @@ const router: IRouter = Router();
 router.get("/:matchId/messages", requireAuth, async (req, res) => {
   try {
     const userId = (req as any).userId;
+    const matchId = Array.isArray(req.params.matchId)
+      ? req.params.matchId[0]
+      : req.params.matchId;
     const match = await db.select().from(matchesTable)
       .where(and(
-        eq(matchesTable.id, req.params.matchId),
+        eq(matchesTable.id, matchId),
         or(eq(matchesTable.user1Id, userId), eq(matchesTable.user2Id, userId))
       ))
       .limit(1);
@@ -25,7 +28,7 @@ router.get("/:matchId/messages", requireAuth, async (req, res) => {
 
     const limit = Math.min(Number(req.query.limit) || 50, 100);
     let query = db.select().from(messagesTable)
-      .where(eq(messagesTable.matchId, req.params.matchId))
+      .where(eq(messagesTable.matchId, matchId))
       .orderBy(desc(messagesTable.createdAt))
       .limit(limit);
 
@@ -34,7 +37,7 @@ router.get("/:matchId/messages", requireAuth, async (req, res) => {
     await db.update(messagesTable)
       .set({ read: true })
       .where(and(
-        eq(messagesTable.matchId, req.params.matchId),
+        eq(messagesTable.matchId, matchId),
         eq(messagesTable.read, false)
       ));
 
@@ -48,11 +51,14 @@ router.get("/:matchId/messages", requireAuth, async (req, res) => {
 router.post("/:matchId/messages", requireAuth, async (req, res) => {
   try {
     const userId = (req as any).userId;
+    const matchId = Array.isArray(req.params.matchId)
+      ? req.params.matchId[0]
+      : req.params.matchId;
     const body = SendMessageBody.parse(req.body);
 
     const match = await db.select().from(matchesTable)
       .where(and(
-        eq(matchesTable.id, req.params.matchId),
+        eq(matchesTable.id, matchId),
         or(eq(matchesTable.user1Id, userId), eq(matchesTable.user2Id, userId))
       ))
       .limit(1);
@@ -65,7 +71,7 @@ router.post("/:matchId/messages", requireAuth, async (req, res) => {
     const messageId = generateId();
     const inserted = await db.insert(messagesTable).values({
       id: messageId,
-      matchId: req.params.matchId,
+      matchId,
       senderId: userId,
       content: body.content,
       read: false,
@@ -81,7 +87,7 @@ router.post("/:matchId/messages", requireAuth, async (req, res) => {
       type: "new_message",
       title: `New message from ${senderName}`,
       body: body.content.slice(0, 100),
-      data: JSON.stringify({ matchId: req.params.matchId }),
+      data: JSON.stringify({ matchId }),
     });
 
     res.status(201).json(formatMessage(inserted[0]));

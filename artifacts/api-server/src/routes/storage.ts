@@ -5,7 +5,6 @@ import {
   RequestUploadUrlResponse,
 } from "@workspace/api-zod";
 import { ObjectStorageService, ObjectNotFoundError } from "../lib/objectStorage";
-import { ObjectPermission } from "../lib/objectAcl";
 
 const router: IRouter = Router();
 const objectStorageService = new ObjectStorageService();
@@ -106,17 +105,9 @@ router.get("/storage/objects/*path", async (req: Request, res: Response) => {
     //   return;
     // }
 
-    const response = await objectStorageService.downloadObject(objectFile);
-
-    res.status(response.status);
-    response.headers.forEach((value, key) => res.setHeader(key, value));
-
-    if (response.body) {
-      const nodeStream = Readable.fromWeb(response.body as ReadableStream<Uint8Array>);
-      nodeStream.pipe(res);
-    } else {
-      res.end();
-    }
+    res.setHeader("Content-Type", objectFile.type || "application/octet-stream");
+    const nodeStream = Readable.fromWeb(objectFile.stream() as ReadableStream<Uint8Array>);
+    nodeStream.pipe(res);
   } catch (error) {
     if (error instanceof ObjectNotFoundError) {
       req.log.warn({ err: error }, "Object not found");

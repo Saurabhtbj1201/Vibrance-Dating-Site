@@ -16,7 +16,8 @@ router.get("/", requireAuth, async (req, res) => {
       .where(and(eq(swipesTable.swiperId, userId), eq(swipesTable.action, "like")));
 
     if (myLikes.length === 0) {
-      return res.json([]);
+      res.json([]);
+      return;
     }
 
     const targetIds = myLikes.map((l) => l.targetId);

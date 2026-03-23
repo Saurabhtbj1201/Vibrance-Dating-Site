@@ -48,8 +48,11 @@ router.get("/", requireAuth, async (req, res) => {
 router.get("/:matchId", requireAuth, async (req, res) => {
   try {
     const userId = (req as any).userId;
+    const matchId = Array.isArray(req.params.matchId)
+      ? req.params.matchId[0]
+      : req.params.matchId;
     const matches = await db.select().from(matchesTable)
-      .where(and(eq(matchesTable.id, req.params.matchId), or(eq(matchesTable.user1Id, userId), eq(matchesTable.user2Id, userId))))
+      .where(and(eq(matchesTable.id, matchId), or(eq(matchesTable.user1Id, userId), eq(matchesTable.user2Id, userId))))
       .limit(1);
     if (matches.length === 0) { res.status(404).json({ error: "Match not found" }); return; }
     const match = matches[0];

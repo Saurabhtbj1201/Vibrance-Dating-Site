@@ -32,10 +32,13 @@ router.get("/", requireAuth, async (req, res) => {
 router.put("/:notificationId/read", requireAuth, async (req, res) => {
   try {
     const userId = (req as any).userId;
+    const notificationId = Array.isArray(req.params.notificationId)
+      ? req.params.notificationId[0]
+      : req.params.notificationId;
     await db.update(notificationsTable)
       .set({ read: true })
       .where(and(
-        eq(notificationsTable.id, req.params.notificationId),
+        eq(notificationsTable.id, notificationId),
         eq(notificationsTable.userId, userId)
       ));
     res.json({ success: true });

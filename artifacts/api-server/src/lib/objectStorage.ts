@@ -46,7 +46,7 @@ export class ObjectStorageService {
 
       const { data, error } = await supabase.storage
         .from(this.publicBucket)
-        .createSignedUploadUrl(filePath, 3600); // 1 hour expiry
+        .createSignedUploadUrl(filePath, { upsert: true });
 
       if (error) {
         throw new Error(`Failed to generate upload URL: ${error.message}`);
