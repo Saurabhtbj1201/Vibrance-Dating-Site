@@ -6,7 +6,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "/artifacts/api-server/dist/index.mjs"
+      "destination": "/api/index.ts"
     },
     {
       "source": "/(.*)",
